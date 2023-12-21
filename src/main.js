@@ -4,6 +4,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 
+
 // Criar a cena
 const scene = new THREE.Scene();
 
@@ -17,7 +18,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.addEventListener('change', render); 
+controls.enableDamping = true; // Opcional: adiciona amortecimento (inércia)
+controls.dampingFactor = 0.25;
 
 function render() {
   renderer.render(scene, camera); // re-renderiza a cena quando os controles mudam
@@ -52,6 +54,8 @@ loader.load('/fonts/helvetiker_regular.typeface.json', function (font) {
 function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
+
+    controls.update();
 }
 
 // Iniciar a animação
