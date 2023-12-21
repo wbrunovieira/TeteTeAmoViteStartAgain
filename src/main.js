@@ -43,6 +43,18 @@ loader.load('/fonts/helvetiker_regular.typeface.json', function (font) {
         bevelSegments: 5
     });
 
+    const textGeometry2 = new TextGeometry('teu pai', {
+      font: font,
+      size: 2,
+      height: 2,
+      curveSegments: 12,
+      bevelEnabled: true,
+      bevelThickness: 1,
+      bevelSize: 0.5,
+      bevelOffset: 0,
+      bevelSegments: 5
+  });
+
     const textMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(0, 0, 1);
@@ -58,7 +70,7 @@ const heartMaterial = new THREE.MeshPhongMaterial({ color: 0xff69b4 });
 
 // Carregar e adicionar corações
 loaderHeart.load('/models/heart.glb', function (gltf) {
-    for (let i = 0; i < 700; i++) {
+    for (let i = 0; i < 200; i++) {
         const heart = gltf.scene.clone();
 
         heart.position.set(
@@ -102,7 +114,7 @@ loaderHeart.load('/models/heart.glb', function (gltf) {
       hearta.position.set(
           (Math.random() - 0.5) * 150 +15 , // Posicionamento mais próximo do texto
           (Math.random() - 0.5) * 30,
-          (Math.random() - 0.5) * 20
+          (Math.random() - 0.5) * 40
       );
 
       hearta.rotation.set(
@@ -123,9 +135,9 @@ loaderHeart.load('/models/heart.glb', function (gltf) {
       // Adiciona animação
       hearta.userData = {
           rotationSpeed: new THREE.Vector3(
-              (Math.random() - 0.5) * 0.7, 
-              (Math.random() - 0.5) * 0.7, 
-              (Math.random() - 0.5) * 0.7
+              (Math.random() - 0.5) * 0.1, 
+              (Math.random() - 0.5) * 0.1, 
+              (Math.random() - 0.5) * 0.1
           )
       };
 
@@ -138,7 +150,7 @@ loaderHeart.load('/models/heart.glb', function (gltf) {
   console.error(error);
 });
 
-// ...[restante do seu código]...
+//foto 1
 
 // Carregador de texturas
 const textureLoader = new THREE.TextureLoader();
@@ -160,7 +172,60 @@ plane.position.set(0, 0, -20); // Ajuste a posição conforme necessário
 plane.rotation.y = Math.PI / 4; // Rotacionar para criar efeito de perspectiva
 scene.add(plane);
 
-// ...[restante do seu código]...
+//foto 2
+
+// Carregador de texturas
+const textureLoader2 = new THREE.TextureLoader();
+
+// Carregar a imagem de fundo
+const backgroundImage2 = textureLoader2.load('/img/tete-na-praia.jpeg', function (texture) {
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+});
+
+// Criar a geometria do plano
+const planeGeometry2 = new THREE.PlaneGeometry(30, 15); // Ajuste o tamanho conforme necessário
+
+// Criar o material com a textura
+const planeMaterial2 = new THREE.MeshBasicMaterial({ map: backgroundImage2, side: THREE.DoubleSide });
+
+// Criar o plano e adicionar à cena
+const plane2 = new THREE.Mesh(planeGeometry2, planeMaterial2);
+plane2.position.set(10, 20, 20); // Ajuste a posição conforme necessário
+plane2.rotation.y = Math.PI / 4; // Rotacionar para criar efeito de perspectiva
+scene.add(plane2);
+
+// criar particulas
+
+const particleGeometry = new THREE.BufferGeometry();
+const particlesCount = 1500; // Ajuste o número de partículas
+const posArray = new Float32Array(particlesCount * 3); // x, y, z para cada partícula
+
+for (let i = 0; i < particlesCount * 3; i++) {
+    // Valores aleatórios para as posições das partículas
+    posArray[i] = (Math.random() - 0.5) * 200;
+}
+
+particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+const particleMaterial = new THREE.PointsMaterial({
+  size: 0.1,
+  color: 0xffffff
+});
+const particleMesh = new THREE.Points(particleGeometry, particleMaterial);
+scene.add(particleMesh);
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+scene.add(ambientLight);
+
+const pointLight1 = new THREE.PointLight(0xff0000, 2, 100);
+pointLight1.position.set(50, 50, 50);
+scene.add(pointLight1);
+
+const pointLight2 = new THREE.PointLight(0x0000ff, 2, 100);
+pointLight2.position.set(-50, -50, -50);
+scene.add(pointLight2);
+
+
 
 let floatTime = 0
 // Função de animação
@@ -180,6 +245,8 @@ function animate() {
   // Animação de flutuação para a imagem
   plane.position.y = 5 + Math.sin(floatTime) * 0.15; // Ajuste os valores conforme necessário
   plane.rotation.z = Math.sin(floatTime) * 0.15; // Ajuste para adicionar rotação
+
+  particleMesh.rotation.y += 0.001;
 
   renderer.render(scene, camera);
   controls.update();
