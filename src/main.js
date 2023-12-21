@@ -6,9 +6,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-
-
-
 // Criar a cena
 const scene = new THREE.Scene();
 
@@ -22,11 +19,11 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true; // Opcional: adiciona amortecimento (inércia)
+controls.enableDamping = true;
 controls.dampingFactor = 0.25;
 
 function render() {
-  renderer.render(scene, camera); // re-renderiza a cena quando os controles mudam
+  renderer.render(scene, camera);
 }
 
 // Carregar a fonte e adicionar o texto
@@ -52,46 +49,46 @@ loader.load('/fonts/helvetiker_regular.typeface.json', function (font) {
     scene.add(light);
     const textMesh = new THREE.Mesh(textGeometry, textMaterial);
 
-    textMesh.position.set(-30, 0, 0); // Ajuste a posição conforme necessário
+    textMesh.position.set(-30, 0, 0);
     scene.add(textMesh);
 });
 
+// Material único para todos os corações
+const heartMaterial = new THREE.MeshPhongMaterial({ color: 0xff69b4 });
 
 loaderHeart.load('/models/heart.glb', function (gltf) {
     for (let i = 0; i < 1000; i++) {
-        // Clona o modelo
         const heart = gltf.scene.clone();
 
-        // Varia a posição aleatoriamente
         heart.position.set(
-            (Math.random() - 0.5) * 100, // x
-            (Math.random() - 0.5) * 100, // y
-            (Math.random() - 0.5) * 100  // z
+            (Math.random() - 0.5) * 100,
+            (Math.random() - 0.5) * 100,
+            (Math.random() - 0.5) * 100
         );
 
-        // Varia a rotação aleatoriamente
         heart.rotation.set(
-            Math.random() * Math.PI, // x
-            Math.random() * Math.PI, // y
-            Math.random() * Math.PI  // z
+            Math.random() * Math.PI,
+            Math.random() * Math.PI,
+            Math.random() * Math.PI
         );
 
-        // Varia o tamanho aleatoriamente
-        const scale = Math.random() * 0.5 + 0.5; // Entre 0.5 e 1.5
+        const scale = Math.random() * 0.5 + 0.5;
         heart.scale.set(scale, scale, scale);
 
-        // Adiciona o coração na cena
+        // Aplicar o material único para o coração
+        heart.traverse(function (node) {
+            if (node.isMesh) {
+                node.material = heartMaterial;
+            }
+        });
+
         scene.add(heart);
     }
 
-    // Re-renderiza a cena
     render();
 }, undefined, function (error) {
     console.error(error);
 });
-
-
-
 
 // Função de animação
 function animate() {
