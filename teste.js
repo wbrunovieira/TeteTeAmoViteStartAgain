@@ -152,6 +152,29 @@ loaderHeart.load('/models/heart.glb', function (gltf) {
     console.error(error);
 });
 
+// ...[restante do seu código]...
+
+// Carregador de texturas
+const textureLoader = new THREE.TextureLoader();
+
+// Carregar a imagem de fundo
+const backgroundImage = textureLoader.load('/img/tete-na-foz.jpg', function (texture) {
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+});
+
+// Criar a geometria do plano
+const planeGeometry = new THREE.PlaneGeometry(30, 15); // Ajuste o tamanho conforme necessário
+
+// Criar o material com a textura
+const planeMaterial = new THREE.MeshBasicMaterial({ map: backgroundImage, side: THREE.DoubleSide });
+
+// Criar o plano e adicionar à cena
+const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+plane.position.set(0, 0, -20); // Ajuste a posição conforme necessário
+plane.rotation.y = Math.PI / 4; // Rotacionar para criar efeito de perspectiva
+scene.add(plane);
+
+// ...[restante do seu código]...
 
 
 
