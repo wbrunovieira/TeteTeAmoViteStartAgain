@@ -56,8 +56,9 @@ loader.load('/fonts/helvetiker_regular.typeface.json', function (font) {
 // Material único para todos os corações
 const heartMaterial = new THREE.MeshPhongMaterial({ color: 0xff69b4 });
 
+// Carregar e adicionar corações
 loaderHeart.load('/models/heart.glb', function (gltf) {
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 700; i++) {
         const heart = gltf.scene.clone();
 
         heart.position.set(
@@ -75,7 +76,7 @@ loaderHeart.load('/models/heart.glb', function (gltf) {
         const scale = Math.random() * 0.5 + 0.5;
         heart.scale.set(scale, scale, scale);
 
-        // Aplicar o material único para o coração
+        // Aplicar o material único para cada coração
         heart.traverse(function (node) {
             if (node.isMesh) {
                 node.material = heartMaterial;
