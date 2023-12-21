@@ -91,12 +91,68 @@ loaderHeart.load('/models/heart.glb', function (gltf) {
     console.error(error);
 });
 
+const animatedHeartsGroup = new THREE.Group();
+
+
+// Carregar e adicionar corações animados
+loaderHeart.load('/models/heart.glb', function (gltf) {
+  for (let i = 0; i < 40; i++) {
+      const hearta = gltf.scene.clone();
+
+      hearta.position.set(
+          (Math.random() - 0.5) * 150 +15 , // Posicionamento mais próximo do texto
+          (Math.random() - 0.5) * 30,
+          (Math.random() - 0.5) * 20
+      );
+
+      hearta.rotation.set(
+          Math.random() * Math.PI,
+          Math.random() * Math.PI,
+          Math.random() * Math.PI
+      );
+
+      const scale = Math.random() * 4.5 + 0.2; // Tamanhos menores
+      hearta.scale.set(scale, scale, scale);
+
+      hearta.traverse(function (node) {
+          if (node.isMesh) {
+              node.material = heartMaterial;
+          }
+      });
+
+      // Adiciona animação
+      hearta.userData = {
+          rotationSpeed: new THREE.Vector3(
+              (Math.random() - 0.5) * 0.7, 
+              (Math.random() - 0.5) * 0.7, 
+              (Math.random() - 0.5) * 0.7
+          )
+      };
+
+      animatedHeartsGroup.add(hearta);
+  }
+
+  scene.add(animatedHeartsGroup);
+  render();
+}, undefined, function (error) {
+  console.error(error);
+});
+
+
 // Função de animação
 function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
+  requestAnimationFrame(animate);
 
-    controls.update();
+  // Aplicando a animação aos corações animados
+  animatedHeartsGroup.children.forEach(hearta => {
+      hearta.rotation.x += hearta.userData.rotationSpeed.x;
+      hearta.rotation.y += hearta.userData.rotationSpeed.y;
+      hearta.rotation.z += hearta.userData.rotationSpeed.z;
+  });
+
+  renderer.render(scene, camera);
+  controls.update();
+
 }
 
 // Iniciar a animação
