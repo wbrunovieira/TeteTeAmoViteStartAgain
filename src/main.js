@@ -45,7 +45,7 @@ loader.load('/fonts/helvetiker_regular.typeface.json', function (font) {
 
     const textGeometry2 = new TextGeometry('Ass. teu pai', {
       font: font,
-      size: 2,
+      size: 1,
       height: 2,
       curveSegments: 12,
       bevelEnabled: true,
