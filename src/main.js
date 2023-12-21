@@ -43,14 +43,14 @@ loader.load('/fonts/helvetiker_regular.typeface.json', function (font) {
         bevelSegments: 5
     });
 
-    const textGeometry2 = new TextGeometry('teu pai', {
+    const textGeometry2 = new TextGeometry('Ass. teu pai', {
       font: font,
       size: 2,
       height: 2,
       curveSegments: 12,
       bevelEnabled: true,
       bevelThickness: 1,
-      bevelSize: 0.5,
+      bevelSize: 0.1,
       bevelOffset: 0,
       bevelSegments: 5
   });
@@ -60,9 +60,10 @@ loader.load('/fonts/helvetiker_regular.typeface.json', function (font) {
     light.position.set(0, 0, 1);
     scene.add(light);
     const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-
+    const textMesh2 = new THREE.Mesh(textGeometry2, textMaterial);
     textMesh.position.set(-30, 0, 0);
-    scene.add(textMesh);
+    textMesh2.position.set(-30, -30, 0);
+    scene.add(textMesh, textMesh2);
 });
 
 // Material único para todos os corações
